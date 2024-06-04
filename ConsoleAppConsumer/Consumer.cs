@@ -2,44 +2,44 @@
 
 public class Consumer
 {
-    private ConnectionFactory _connectionFactory;
-    private IConnection _connection;
-    private IModel _channel;
     private const string QUEUE = "queue-netcore";
+    private ConnectionFactory _connectionFactory;
 
     public Consumer()
-    {
-        _connectionFactory = new ConnectionFactory { HostName = "localhost" };
-        _connection = _connectionFactory.CreateConnection();
-        _channel = _connection.CreateModel();
-    }
+        => _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
 
-    // FIX: não está consumindo a mensagem publicada.
     public void Consume()
     {
-        // 1 erro - faltou declarar a fila, blz corrigido!
-        _channel.QueueDeclare
-        (
-            queue: QUEUE,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null
-        );
-
-        var consumer = new EventingBasicConsumer(_channel);
-
-        consumer.Received += (sender, eventArgs) =>
+        using (var connection = _connectionFactory.CreateConnection())
         {
-            var contentArray = eventArgs.Body.ToArray();
-            var contentString = Encoding.UTF8.GetString(contentArray);
-            var message = JsonSerializer.Deserialize<Car>(contentString);
+            using (var channel = connection.CreateModel())
+            {
+                // Declara a fila
+                channel.QueueDeclare(queue: QUEUE,
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-            Console.WriteLine($"Message received: {message}");
+                // Configura o consumer para receber mensagens da fila
+                var consumer = new EventingBasicConsumer(channel);
 
-            _channel.BasicAck(deliveryTag: eventArgs.DeliveryTag, multiple: false);
-        };
+                consumer.Received += (sender, eventArgs) =>
+                {
+                    var body = eventArgs.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    Console.WriteLine(" [x] Received {0}", message);
 
-        _channel.BasicConsume(queue: QUEUE, autoAck: false, consumer: consumer);
+                    channel.BasicAck(deliveryTag: eventArgs.DeliveryTag, multiple: false);
+                };
+
+                channel.BasicConsume(queue: QUEUE,
+                                     autoAck: false,
+                                     consumer: consumer);
+
+                Console.WriteLine(" Press [enter] to exit.");
+                Console.ReadLine();
+            }
+        }
     }
 }
