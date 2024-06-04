@@ -20,7 +20,7 @@ public class Publisher
             using (var channel = connection.CreateModel())
             {
                 // Declarar a exchange.
-                channel.ExchangeDeclare(exchange: EXCHANGE, type: "topic");
+                channel.ExchangeDeclare(exchange: EXCHANGE, type: TypeExchange.Topic);
 
                 // Garantir que a fila esteja criada.
                 channel.QueueDeclare
@@ -46,4 +46,12 @@ public class Publisher
             }
         }
     }
+}
+
+public class TypeExchange
+{
+    public const string Direct = "direct";
+    public const string Fanout = "fanout";
+    public const string Headers = "headers";
+    public const string Topic = "topic";
 }
