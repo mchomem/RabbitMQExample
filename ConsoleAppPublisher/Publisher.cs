@@ -1,6 +1,4 @@
-﻿using RabbitMQ.Client;
-
-namespace ConsoleAppPublisher;
+﻿namespace ConsoleAppPublisher;
 
 public class Publisher
 {
