@@ -34,7 +34,7 @@ public class Publisher
                     arguments: null
                 );
 
-                // Faz o binding
+                // Faz o binding da fila com a exchange usando a routing key
                 channel.QueueBind(queue: QUEUE, exchange: EXCHANGE, routingKey: ROUTING_KEY);
 
                 // Publicar a mensagem.
