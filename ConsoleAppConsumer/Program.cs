@@ -2,7 +2,7 @@
 
 Console.WriteLine("RabbitMQ - comsumming");
 
-new Consumer().Consume("queue-netcore");
+new Consumer().Consume();
 
 Console.WriteLine("RabbitMQ - done");
 

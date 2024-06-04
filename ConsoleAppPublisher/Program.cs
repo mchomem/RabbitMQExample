@@ -1,12 +1,7 @@
 ﻿Console.WriteLine("RabbitMQ - publishing ...");
 
-var queue = "queue-netcore";
-
 var car = new Car(1, "Ferrari", new DateTime(2024, 06, 03));
-var carJsonString = JsonSerializer.Serialize(car);
-var carBytes = Encoding.UTF8.GetBytes(carJsonString);
-
-new Publisher().Publish(queue, carBytes);
+new Publisher().Publish<Car>(car);
 
 Console.WriteLine("RabbitMQ - done");
 

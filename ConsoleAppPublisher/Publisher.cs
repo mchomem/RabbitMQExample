@@ -4,32 +4,47 @@ namespace ConsoleAppPublisher;
 
 public class Publisher
 {
-    const string EXCHANGE = "exchange-netcore";
+    private const string EXCHANGE = "exchange-netcore";
+    private const string ROUTING_KEY = "rounting-key-netcore";
+    private const string QUEUE = "queue-netcore";
     private ConnectionFactory _connectionFactory;
 
     public Publisher()
         => _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
 
-    public void Publish(string queue, byte[] message)
+    public void Publish<T>(T message)
     {
+        var objectJsonString = JsonSerializer.Serialize(message);
+        var objectToBytes = Encoding.UTF8.GetBytes(objectJsonString);
+
         using (var connection = _connectionFactory.CreateConnection())
         {
             using (var channel = connection.CreateModel())
             {
-                // Garantir que a fila esteja criada
-                channel.QueueDeclare(
-                    queue: queue,
+                // Declarar a exchange.
+                channel.ExchangeDeclare(exchange: EXCHANGE, type: "topic");
+
+                // Garantir que a fila esteja criada.
+                channel.QueueDeclare
+                (
+                    queue: QUEUE,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
-                    arguments: null);
+                    arguments: null
+                );
 
-                // Publicar a mensagem
-                channel.BasicPublish(
-                    exchange: string.Empty,
-                    routingKey: queue,
+                // Faz o binding
+                channel.QueueBind(queue: QUEUE, exchange: EXCHANGE, routingKey: ROUTING_KEY);
+
+                // Publicar a mensagem.
+                channel.BasicPublish
+                (
+                    exchange: EXCHANGE,
+                    routingKey: ROUTING_KEY,
                     basicProperties: null,
-                    body: message);
+                    body: objectToBytes
+                );
             }
         }
     }

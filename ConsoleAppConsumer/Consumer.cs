@@ -5,6 +5,7 @@ public class Consumer
     private ConnectionFactory _connectionFactory;
     private IConnection _connection;
     private IModel _channel;
+    private const string QUEUE = "queue-netcore";
 
     public Consumer()
     {
@@ -14,14 +15,17 @@ public class Consumer
     }
 
     // FIX: não está consumindo a mensagem publicada.
-    public void Consume(string queue)
+    public void Consume()
     {
         // 1 erro - faltou declarar a fila, blz corrigido!
-        _channel.QueueDeclare(queue: queue,
-                                durable: false,
-                                exclusive: false,
-                                autoDelete: false,
-                                arguments: null);
+        _channel.QueueDeclare
+        (
+            queue: QUEUE,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
 
         var consumer = new EventingBasicConsumer(_channel);
 
@@ -33,9 +37,9 @@ public class Consumer
 
             Console.WriteLine($"Message received: {message}");
 
-            _channel.BasicAck(eventArgs.DeliveryTag, false);
+            _channel.BasicAck(deliveryTag: eventArgs.DeliveryTag, multiple: false);
         };
 
-        _channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        _channel.BasicConsume(queue: QUEUE, autoAck: false, consumer: consumer);
     }
 }
