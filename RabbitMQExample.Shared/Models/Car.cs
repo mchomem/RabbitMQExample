@@ -1,4 +1,4 @@
-﻿namespace ConsoleAppPublisher;
+﻿namespace RabbitMQExample.Shared.Models;
 
 public class Car
 {

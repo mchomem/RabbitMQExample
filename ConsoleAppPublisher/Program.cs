@@ -1,8 +1,4 @@
-﻿using ConsoleAppPublisher;
-using System.Text;
-using System.Text.Json;
-
-Console.WriteLine("RabbitMQ - publishing...");
+﻿Console.WriteLine("RabbitMQ - publishing ...");
 
 var queue = "queue-netcore";
 
@@ -13,7 +9,6 @@ var carBytes = Encoding.UTF8.GetBytes(carJsonString);
 new Publisher().Publish(queue, carBytes);
 
 Console.WriteLine("RabbitMQ - done");
-
 
 //using RabbitMQ.Client;
 //using System.Text;
