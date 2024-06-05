@@ -1,4 +1,5 @@
-﻿
+﻿Console.Title = "Rabbit MQ Publisher";
+
 ShowMenu();
 
 static void ShowMenu()
