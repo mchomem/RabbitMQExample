@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ConsoleAppConsumer/ConsoleAppConsumer.csproj" />
+  <Project Path="ConsoleAppPublisher/ConsoleAppPublisher.csproj" />
+  <Project Path="RabbitMQExample.Shared/RabbitMQExample.Shared.csproj" />
+  <Project Path="RabbitMQExample.WorkerService/RabbitMQExample.WorkerService.csproj" />
+</Solution>
