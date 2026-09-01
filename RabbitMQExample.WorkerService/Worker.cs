@@ -1,4 +1,4 @@
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
@@ -8,8 +8,8 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private const string QUEUE = "queue-netcore";
-    private ConnectionFactory _connectionFactory;
-    private IModel _channel;
+    private readonly ConnectionFactory _connectionFactory;
+    private readonly IModel _channel;
 
     public Worker(ILogger<Worker> logger)
     {

@@ -1,8 +1,8 @@
-using RabbitMQExample.WorkerService;
+Ôªøusing RabbitMQExample.WorkerService;
 
 #if DEBUG
 
-// Em ambiente de produÁ„o ao instalar um worker no windows, n„o se deve utilizar propriedades de console!
+// Em ambiente de produ√ß√£o ao instalar um worker no windows, n√£o se deve utilizar propriedades de console!
 
 Console.Title = "RabbitMQ Worker Consumer";
 
@@ -12,4 +12,4 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
-host.Run();
+await host.RunAsync();

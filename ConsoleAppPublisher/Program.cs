@@ -45,11 +45,18 @@ static void ExecuteXTimes(int times)
 {
     Console.WriteLine("RabbitMQ - publishing ...");
     var random = new Random();
-    List<string> carNames = new List<string> { "Porche", "Ferrari", "Volkswagen", "Toyota", "Honda" };
+    IEnumerable<string> carNames = new List<string> { "Porche", "Ferrari", "Volkswagen", "Toyota", "Honda" };
 
     for (int i = 0; i < times; i++)
     {
-        var car = new Car(Guid.NewGuid(), carNames.ElementAt(random.Next(0, carNames.Count - 1)), new DateTime(random.Next(1999, 2024), random.Next(1, 12), random.Next(1, 28)));
+        var year = random.Next(1999, 2024);
+        var month = random.Next(1, 12);
+        var day = random.Next(1, 28);
+        var hour = random.Next(0, 23);
+        var minute = random.Next(0, 59);
+        var second = random.Next(0, 59);
+
+        var car = new Car(Guid.NewGuid(), carNames.ElementAt(random.Next(0, carNames.Count() - 1)), new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc));
         new Publisher().Publish<Car>(car);
     }
 

@@ -5,10 +5,12 @@ public class Publisher
     private const string EXCHANGE = "exchange-netcore";
     private const string ROUTING_KEY = "rounting-key-netcore";
     private const string QUEUE = "queue-netcore";
-    private ConnectionFactory _connectionFactory;
+    private readonly ConnectionFactory _connectionFactory;
 
     public Publisher()
-        => _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+    {
+        _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+    }
 
     public void Publish<T>(T message)
     {
@@ -48,7 +50,7 @@ public class Publisher
     }
 }
 
-public class TypeExchange
+public static class TypeExchange
 {
     public const string Direct = "direct";
     public const string Fanout = "fanout";

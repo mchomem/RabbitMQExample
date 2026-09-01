@@ -3,10 +3,12 @@
 public class Consumer
 {
     private const string QUEUE = "queue-netcore";
-    private ConnectionFactory _connectionFactory;
+    private readonly ConnectionFactory _connectionFactory;
 
     public Consumer()
-        => _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+    { 
+        _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+    }
 
     public void Consume()
     {
