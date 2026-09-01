@@ -7,3 +7,7 @@ Simple example of using RabbitMQ, containing a message publisher and a consumer 
 Follow the command line to upload the RabbitMQ image to Docker
 
 `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management`
+
+or
+
+`docker compose up -d`
