@@ -1,21 +1,16 @@
-﻿using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
+﻿namespace RabbitMQExample.WorkerService;
 
-namespace RabbitMQExample.WorkerService;
-
-public class Worker : BackgroundService
+public sealed class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private const string QUEUE = "queue-netcore";
-    private readonly ConnectionFactory _connectionFactory;
     private readonly IModel _channel;
 
     public Worker(ILogger<Worker> logger)
     {
         _logger = logger;
-        _connectionFactory = new ConnectionFactory() { HostName = "localhost" };
-        var connection = _connectionFactory.CreateConnection();
+        var connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+        var connection = connectionFactory.CreateConnection();
         _channel = connection.CreateModel();
     }
 
@@ -24,7 +19,7 @@ public class Worker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             if (_logger.IsEnabled(LogLevel.Information))
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Worker running at: {0}", DateTimeOffset.Now);
 
             // Declara a fila
             _channel.QueueDeclare(queue: QUEUE,
@@ -40,7 +35,11 @@ public class Worker : BackgroundService
             {
                 var body = eventArgs.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine("Received {0}", message);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("\nReceived data: ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\n{0}\n", IdentJson(message));
 
                 _channel.BasicAck(deliveryTag: eventArgs.DeliveryTag, multiple: false);
             };
@@ -49,9 +48,18 @@ public class Worker : BackgroundService
                                  autoAck: false,
                                  consumer: consumer);
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Consume done.");
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
         }
+    }
+
+    private string IdentJson(string content)
+    {
+        using var document = JsonDocument.Parse(content);
+        string indentedJson = JsonSerializer.Serialize(document, new JsonSerializerOptions { WriteIndented = true });
+        return indentedJson;
     }
 }

@@ -1,6 +1,4 @@
-﻿using RabbitMQExample.WorkerService;
-
-#if DEBUG
+﻿#if DEBUG
 
 // Em ambiente de produção ao instalar um worker no windows, não se deve utilizar propriedades de console!
 

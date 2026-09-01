@@ -1,50 +1,48 @@
 ﻿Console.Title = "Rabbit MQ Publisher";
 
-ShowMenu();
-
-static void ShowMenu()
+while (true)
 {
-    while (true)
+    Console.Clear();
+    Console.WriteLine("Choose an option");
+    Console.WriteLine("1 - Publish 1 message in RabbitMQ");
+    Console.WriteLine("2 - Publish 10 messages in RabbitMQ");
+    Console.WriteLine("3 - Publish 100 messages in RabbitMQ");
+    Console.WriteLine("0 - Exit");
+    Console.Write("Option: ");
+    var option = Console.ReadLine();
+
+    switch (option)
     {
-        Console.Clear();
-        Console.WriteLine("Choose an option");
-        Console.WriteLine("1 - Publish 1 message in RabbitMQ");
-        Console.WriteLine("2 - Publish 10 messages in RabbitMQ");
-        Console.WriteLine("3 - Publish 100 messages in RabbitMQ");
-        Console.WriteLine("0 - Exit");
-        Console.Write("Option: ");
-        var option = Console.ReadLine();
+        case "1":
+            ExecuteXTimes(1);
+            break;
 
-        switch (option)
-        {
-            case "1":
-                ExecuteXTimes(1); break;
+        case "2":
+            ExecuteXTimes(10);
+            break;
 
-            case "2":
-                ExecuteXTimes(10); break;
+        case "3":
+            ExecuteXTimes(100);
+            break;
 
-            case "3":
-                ExecuteXTimes(100); break;
+        case "0":
+            Console.WriteLine("Exiting ...");
+            Environment.Exit(0);
+            break;
 
-            case "0":
-                Console.WriteLine("Exiting...");
-                Environment.Exit(0);
-                break;
-
-            default:
-                Console.WriteLine("Choose any option from menu. Pressa any key to continue...");
-                Console.ReadKey();
-                break;
-        }
-
-        Console.ReadKey();
+        default:
+            Console.WriteLine("Choose any option from menu. Press any key to continue...");
+            Console.ReadKey();
+            break;
     }
+
+    Console.ReadKey();
 }
 
 static void ExecuteXTimes(int times)
 {
     Console.WriteLine("RabbitMQ - publishing ...");
-    var random = new Random();
+    var random = Random.Shared;
     IEnumerable<string> carNames = new List<string> { "Porche", "Ferrari", "Volkswagen", "Toyota", "Honda" };
 
     for (int i = 0; i < times; i++)
